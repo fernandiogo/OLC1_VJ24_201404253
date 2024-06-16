@@ -51,6 +51,8 @@ public class P_Inicio extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextArea3 = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -73,6 +75,10 @@ public class P_Inicio extends javax.swing.JFrame {
         jTextArea3.setColumns(20);
         jTextArea3.setRows(5);
         jScrollPane3.setViewportView(jTextArea3);
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane2.setViewportView(jTextArea2);
 
         Archivo.setText("Archivo");
 
@@ -110,6 +116,11 @@ public class P_Inicio extends javax.swing.JFrame {
         jMenuBar1.add(Ejecutar);
 
         Reportes.setText("Reportes");
+        Reportes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ReportesMouseClicked(evt);
+            }
+        });
         jMenuBar1.add(Reportes);
 
         setJMenuBar(jMenuBar1);
@@ -123,14 +134,21 @@ public class P_Inicio extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jScrollPane3)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE))
-                .addContainerGap(378, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(76, 76, 76)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(165, Short.MAX_VALUE))
         );
@@ -218,6 +236,41 @@ public class P_Inicio extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_EjecutarMouseClicked
 
+    private void ReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ReportesMouseClicked
+        // TODO add your handling code here:
+        try{
+            String texto = jTextArea1.getText();
+            scanner s = new scanner(new BufferedReader(new StringReader(texto)));
+            parser p = new parser(s);
+            var resultado = p.parse();
+            var ast = new Arbol((LinkedList<Instruccion>) resultado.value);
+            var tabla = new tablaSimbolos();
+            tabla.setNombre("Global");
+            ast.setConsola("");
+            LinkedList<Errores> listaGlobal = new LinkedList<>();
+            listaGlobal.addAll(s.listaErrores);
+            listaGlobal.addAll(p.listaErrores);
+            for(var a : ast.getInstrucciones()){
+                if(a == null){
+                    continue;
+                }
+                var res = a.interpretar(ast, tabla);
+                if(res instanceof Errores){
+                    listaGlobal.add((Errores)res);
+                }
+            }
+            //jTextArea3.setText(ast.getConsola());
+            //System.out.println(ast.getConsola());
+            for(var i: listaGlobal){
+                System.out.println(i);
+                jTextArea2.setText(i.getTipo()+ "," + i.getDescripcion() +"," + i.getColumna()+"," +i.getLinea());
+            }            
+        }catch(Exception ex){
+            System.out.println("Algo salio mal");
+            System.out.println(ex);
+        }
+    }//GEN-LAST:event_ReportesMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -264,9 +317,11 @@ public class P_Inicio extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     // End of variables declaration//GEN-END:variables
 }
