@@ -111,7 +111,7 @@ SIF ::= IF PAR_A EXPRESION:a PAR_C LLAVE1 INSTRUCCIONES:b LLAVE2  {: RESULT = ne
 CFOR ::= FOR PAR_A ASIGNACION:a EXPRESION:b FINCADENA ACTUALIZA_FOR:c PAR_C LLAVE1 INSTRUCCIONES:d LLAVE2  {: RESULT = new For(a, b, c, d, aleft, aright ); :}
 ;
 
-ACTUALIZA_FOR ::= ID:a IGUAL EXPRESION:b {: RESULT = new Asignacion(a, b, aleft, aright); :}
+ACTUALIZA_FOR ::= ID:a IGUAL EXPRESION:b {: RESULT = new AsignacionVar(a, b, aleft, aright); :}
 ;
 
 TIPOS ::= INT           {: RESULT = new Tipo(TipoDato.ENTERO); :}
