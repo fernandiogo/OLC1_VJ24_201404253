@@ -14,10 +14,11 @@ public class Errores {
     private int linea;
     private int columna;
 
-    public Errores(String tipo, String descripcion, int linea) {
+    public Errores(String tipo, String descripcion, int linea, int col) {
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.linea = linea;
+        this.columna = columna;
     }
 
     public String getTipo() {

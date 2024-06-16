@@ -4,6 +4,25 @@
  */
 package olc1_vj24_201404253;
 
+import abstracto.Instruccion;
+import analisis.parser;
+import analisis.scanner;
+import excepciones.Errores;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.LinkedList;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import simbolo.Arbol;
+import simbolo.tablaSimbolos;
+
 /**
  *
  * @author Diego
@@ -26,16 +45,22 @@ public class P_Inicio extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenu1 = new javax.swing.JMenu();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
         Pestañas = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
         Ejecutar = new javax.swing.JMenu();
         Reportes = new javax.swing.JMenu();
+
+        jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,17 +70,43 @@ public class P_Inicio extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("tab1", jScrollPane1);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jScrollPane3.setViewportView(jTextArea3);
 
         Archivo.setText("Archivo");
+
+        jMenu2.setText("Abrir");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
+        Archivo.add(jMenu2);
+
+        jMenu3.setText("Guardar");
+        Archivo.add(jMenu3);
+
         jMenuBar1.add(Archivo);
 
         Pestañas.setText("Pestañas");
+
+        jMenu4.setText("jMenu4");
+        jMenu4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu4ActionPerformed(evt);
+            }
+        });
+        Pestañas.add(jMenu4);
+
         jMenuBar1.add(Pestañas);
 
         Ejecutar.setText("Ejecutar");
+        Ejecutar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                EjecutarMouseClicked(evt);
+            }
+        });
         jMenuBar1.add(Ejecutar);
 
         Reportes.setText("Reportes");
@@ -70,8 +121,8 @@ public class P_Inicio extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
-                    .addComponent(jTabbedPane1))
+                    .addComponent(jScrollPane3)
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE))
                 .addContainerGap(378, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -79,13 +130,93 @@ public class P_Inicio extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addGap(76, 76, 76)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        // TODO add your handling code here:
+        JFileChooser elige= new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.DF","df");
+        elige.setFileFilter (filtro);
+        int seleccion=elige.showOpenDialog(this);
+        
+        if(seleccion==JFileChooser.APPROVE_OPTION){
+            File fichero = elige.getSelectedFile();
+            try (FileReader fr = new FileReader(fichero)){
+                String cadena = "";
+                int valor = fr.read();
+                while (valor != -1){
+                    cadena = cadena + (char)valor;
+                    valor = fr.read();
+                }
+                /*agregar el texto al textarea
+                int indice = jTabbedPane1.getSelectedComponent();
+                //jTabbedPane1.remove(indice);
+                */
+                //int indice = jTabbedPane1.getSelectedComponent();
+                jTextArea1.setText(cadena);
+                
+                
+            } catch (IOException el) {
+                el.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu4ActionPerformed
+        // TODO add your handling code here:
+        String nombrePestaña = JOptionPane.showInputDialog(null, "Escriba el nombre la pestaña:", "New Tab", JOptionPane.INFORMATION_MESSAGE);
+        UIManager.put("OptionPane.okButtonText", "Ok");
+        UIManager.put("OptionPane.cancelButtonText", "Cancel");
+        
+        if (nombrePestaña!=null){
+            
+            JLabel tituloPestaña = new JLabel(nombrePestaña);
+            JTextArea areaDeTexto = new JTextArea();
+            
+            jTabbedPane1.addTab(nombrePestaña, areaDeTexto);
+            jTabbedPane1.setTabComponentAt(jTabbedPane1.getTabCount()-1, tituloPestaña);
+        }
+    }//GEN-LAST:event_jMenu4ActionPerformed
+
+    private void EjecutarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_EjecutarMouseClicked
+        // TODO add your handling code here:
+        try{
+            String texto = jTextArea1.getText();
+            scanner s = new scanner(new BufferedReader(new StringReader(texto)));
+            parser p = new parser(s);
+            var resultado = p.parse();
+            var ast = new Arbol((LinkedList<Instruccion>) resultado.value);
+            var tabla = new tablaSimbolos();
+            tabla.setNombre("Global");
+            ast.setConsola("");
+            LinkedList<Errores> listaGlobal = new LinkedList<>();
+            listaGlobal.addAll(s.listaErrores);
+            listaGlobal.addAll(p.listaErrores);
+            for(var a : ast.getInstrucciones()){
+                if(a == null){
+                    continue;
+                }
+                var res = a.interpretar(ast, tabla);
+                if(res instanceof Errores){
+                    listaGlobal.add((Errores)res);
+                }
+            }
+            jTextArea3.setText(ast.getConsola());
+            //System.out.println(ast.getConsola());
+            for(var i: listaGlobal){
+                System.out.println(i);
+            }            
+        }catch(Exception ex){
+            System.out.println("Algo salio mal");
+            System.out.println(ex);
+        }
+    }//GEN-LAST:event_EjecutarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -127,11 +258,15 @@ public class P_Inicio extends javax.swing.JFrame {
     private javax.swing.JMenu Ejecutar;
     private javax.swing.JMenu Pestañas;
     private javax.swing.JMenu Reportes;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextArea3;
     // End of variables declaration//GEN-END:variables
 }

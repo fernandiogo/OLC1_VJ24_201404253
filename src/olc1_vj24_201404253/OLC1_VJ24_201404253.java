@@ -4,6 +4,16 @@
  */
 package olc1_vj24_201404253;
 
+import abstracto.Instruccion;
+import analisis.parser;
+import analisis.scanner;
+import excepciones.Errores;
+import java.io.BufferedReader;
+import java.io.StringReader;
+import java.util.LinkedList;
+import simbolo.Arbol;
+import simbolo.tablaSimbolos;
+
 /**
  *
  * @author Diego
@@ -15,6 +25,7 @@ public class OLC1_VJ24_201404253 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        new P_Inicio().setVisible(true);
     }
     
 }
